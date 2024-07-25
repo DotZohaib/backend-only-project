@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+<style>
+/* CSS for Profile Page */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f9;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background-color: #333;
+  color: #fff;
+  padding: 20px 0;
+  text-align: center;
+}
+
+.profile-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.profile-header img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-header img:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.profile-header h1 {
+  margin: 10px 0;
+  font-size: 2em;
+}
+
+.profile-header button,
+.profile-header a {
+  background-color: #ff6b6b;
+  color: #fff;
+  padding: 10px 20px;
+  margin: 5px;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.profile-header button:hover,
+.profile-header a:hover {
+  background-color: #ff5252;
+  transform: scale(1.05);
+}
+
+.profile-header button:focus,
+.profile-header a:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(255, 105, 105, 0.7);
+}
+
+/* Animation for fading in the header */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+header {
+  animation: fadeIn 1s ease-out;
+}
+
+/* CSS for Posts Section */
+#posts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 30px;
+  justify-content: center;
+}
+
+.post-card {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  /* max-width: 300px; */
+  padding: 22px;
+  width: 25%;
+  height: 440px;
+}
+
+.post-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.post-card h2 {
+  font-size: 1.5em;
+  margin: 8px;
+}
+
+.post-card p {
+  margin: 8px;
+  color: #555;
+}
+
+.post-card small {
+  display: block;
+  margin-top: 10px;
+  color: #999;
+}
+
+.post-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.post-card p img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+.likes-count {
+  font-size: 16px;
+}
+
+.likes-count.zero-likes {
+  color: red;
+}
+
+.likes-count.more-likes {
+  color: green;
+}
+
+.like-form button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 12px;
+  transition: background-color 0.3s;
+}
+
+.like-form button:hover {
+  background-color: #45a049;
+}
+
+
+/* Animation for fading in the posts */
+@keyframes fadeInPosts {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.post-card {
+  animation: fadeInPosts 1s ease-out;
+}
+
+
+#navbar{
+  background-color: #333;
+}
+
+</style>
+<body>
+  <header>
+    <div class="profile-header">
+      <img src="/images/uploads/<%= user.image %>" alt="User Image" class="profile-image">
+      <h1><%= user.username %></h1>
+      <div id="navbar">
+        <button id="edit">Edit Profile Image</button>
+      <a href="uploader">Upload</a>
+      <a href="search">Search User</a>
+      <a href="feed">User Profile</a>
+      <a href="/logout">Logout</a>
+      </div>
+    </div>
+  </header>
+  <main>
+    <section id="posts">
+      <% posts.slice().reverse().forEach(function(post) { %>
+        <div class="post-card">
+          <img src="/images/uploads/<%= post.picture %>" alt="Post Image">
+          <h2><%= post.title %></h2>
+          <p><%= post.content %></p>
+          <p><b>Prices: $</b><%= post.prices %></p>
+          <p><img src="/images/uploads/<%= post.author.image %>" alt="User Image"><%= post.author.username %><small>Posted on <%= post.date.toLocaleDateString() %> </small></p>
+          <p class="likes-count">Likes: <%= post.likes.length %></p>
+          <form class="like-form" data-post-id="<%= post._id %>">
+            <button id="btn2" type="submit">
+              <%= post.likes.includes(user._id) ? 'Unlike' : 'Like' %>
+            </button>
+          </form>
+        </div>
+      <% }) %>
+    </section>
+  </main>
+
+  <form hidden id="form" action="/file" method="post" enctype="multipart/form-data">
+    <input type="file" name="photo">
+    <button type="submit">Upload</button>
+  </form>                
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+
+document.addEventListener('DOMContentLoaded', function () {
+  const likeCounts = document.querySelectorAll('.likes-count');
+
+  likeCounts.forEach(countElement => {
+    const likes = parseInt(countElement.textContent.replace('Likes: ', ''), 10);
+    if (likes === 0) {
+      countElement.classList.add('zero-likes');
+    } else if (likes > 0) {
+      countElement.classList.add('more-likes');
+    }
+  });
+});
+
+
+
+
+    document.querySelector("#edit").addEventListener("click", function () {
+        document.querySelector("#form input").click();
+    });
+
+    document.querySelector("#form input").addEventListener("change", function () {
+        document.querySelector("#form").submit();
+    });
+
+    $(document).ready(function() {
+      $('.like-form').on('submit', function(event) {
+        event.preventDefault(); // Prevent the form from submitting the traditional way
+        const form = $(this);
+        const postId = form.data('post-id');
+
+        $.ajax({
+          url: `/like/${postId}`,
+          method: 'POST',
+          success: function(response) {
+            // Update the like button text based on the response
+            if (response.liked) {
+              form.find('button').text('Unlike');
+            } else {
+              form.find('button').text('Like');
+            }
+
+            // Update the likes count
+            form.closest('.post-card').find('.likes-count').text(`Likes: ${response.likesCount}`);
+          },
+          error: function(xhr, status, error) {
+            console.error('Error liking the post:', error);
+          }
+        });
+      });
+    });
+  </script>
+</body>
+
+
+</html>

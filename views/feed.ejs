@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= user.username %>'s Profile</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<style>
+ @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@700&display=swap');
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  background: linear-gradient(to right, #f4f4f4, #eaeaea);
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+header {
+  background-color: #0073e6;
+  color: white;
+  padding: 1em;
+  text-align: center;
+}
+
+header nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+}
+
+header nav ul li {
+  margin: 0 1em;
+}
+
+header nav ul li a {
+  color: white;
+  text-decoration: none;
+  padding: 0.5em 1em;
+  transition: background-color 0.3s;
+}
+
+header nav ul li a:hover {
+  background-color: #005bb5;
+}
+
+main {
+  padding: 2em;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.profile-header {
+  text-align: center;
+  margin-bottom: 2em;
+}
+
+.profile-image {
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  animation: fadeIn 1s;
+}
+
+.profile-stats {
+  display: flex;
+  justify-content: center;
+  gap: 2em;
+  margin-top: 1em;
+}
+
+.profile-stats div {
+  text-align: center;
+}
+
+.profile-stats span:first-child {
+  display: block;
+  font-size: 1.5em;
+  font-weight: bold;
+  font-family: 'Roboto', sans-serif;
+}
+
+#posts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+  justify-content: center;
+}
+
+.post-card {
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 1em;
+  width: 300px;
+  height: 400px;
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+  animation: fadeInUp 0.6s;
+}
+
+.post-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.post-card img {
+  border-radius: 5px;
+  width: 100%;
+  height: 230px;
+  object-fit: cover;
+  margin-bottom: 0.5em;
+}
+
+
+.post-card h2 {
+  margin: 0.2em 0;
+  color: #0073e6;
+  font-family: 'Roboto', sans-serif;
+}
+
+.post-card p {
+  color: #555;
+}
+
+.like-button {
+  background-color: #0073e6;
+  color: white;
+  border: none;
+  padding: 0.2em 1em;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.like-button:hover {
+  background-color: #005bb5;
+}
+
+@media (max-width: 768px) {
+  .profile-stats {
+    flex-direction: column;
+  }
+
+  .post-card {
+    width: 100%;
+    height: auto;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+</style>
+<body>
+  <header>
+    <nav>
+      <ul>
+        <li><a href="/profile">Profile</a></li>
+        <li><a href="/feed">Feed</a></li>
+        <li><a href="/logout">Logout</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section class="profile-header">
+      <img src="/images/uploads/<%= user.image %>" alt="Profile Image" class="profile-image">
+      <h1><%= user.username %></h1>
+      <div class="profile-stats">
+        <div>
+          <span><%= user.posts.length %></span>
+          <span>Posts</span>
+        </div>
+        <div>
+          <span><%= totalLikes %></span>
+          <span>Total Likes</span>
+        </div>
+      </div>
+    </section>
+    <section id="posts">
+      <% posts.reverse().forEach(function(post) { %>
+        <div class="post-card">
+          <img src="/images/uploads/<%= post.picture %>" alt="Post Image">
+          <h2><%= post.title %></h2>
+          <p><%= post.content %></p>
+          <p>
+            <small>Posted on <%= post.date.toLocaleDateString() %></small>
+          </p>
+          <p>Likes: <%= post.likes.length %></p>
+        </div>
+      <% }) %>
+    </section>
+  </main>
+  <script>
+    document.querySelectorAll(".like-button").forEach(button => {
+      button.addEventListener("click", function() {
+        const postId = this.dataset.postId;
+        fetch(`/like/${postId}`, { method: "POST" })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              this.innerText = `Likes: ${data.likes}`;
+            } else {
+              alert("Failed to like the post");
+            }
+          });
+      });
+    });
+  </script>
+</body>
+</html>

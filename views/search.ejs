@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Users</title>
+  <link rel="stylesheet" href="/path/to/your/css/style.css">
+</head>
+<style>
+ body {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  background-color: #f0f2f5;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+header {
+  background-color: #007bff;
+  color: white;
+  padding: 1.5em;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+header form {
+  margin-top: 1em;
+}
+
+header input[type="text"] {
+  padding: 0.6em;
+  width: 280px;
+  border: none;
+  border-radius: 4px;
+  margin-right: 0.5em;
+  font-size: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+header button {
+  padding: 0.6em 1em;
+  border: none;
+  border-radius: 4px;
+  background-color: #28a745;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+header button:hover {
+  background-color: #218838;
+}
+
+main {
+  padding: 2em;
+}
+
+#users {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5em;
+  justify-content: center;
+}
+
+.user-card {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 1.5em;
+  width: 250px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.user-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.user-card img {
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  margin-bottom: 1em;
+}
+
+.user-card h2 {
+  margin: 0.5em 0;
+  font-size: 20px;
+  color: #007bff;
+}
+
+.user-card p {
+  color: #555;
+}
+
+button, input[type="text"] {
+  transition: box-shadow 0.3s ease;
+}
+
+button:focus, input[type="text"]:focus {
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+  outline: none;
+}
+
+
+</style>
+<body>
+  <header>
+    <h1>Search Users</h1>
+    <form action="/search" method="get">
+      <input type="text" name="q" placeholder="Search by username" value="<%= typeof q !== 'undefined' ? q : '' %>">
+      <button type="submit">Search</button>
+    </form>
+  </header>
+  <main>
+    <section id="users">
+      <% if (users.length > 0) { %>
+        <% users.forEach(function(user) { %>
+          <div class="user-card">
+            <img src="/images/uploads/<%= user.image %>" alt="User Image" class="user-image">
+            <h2><%= user.username %></h2>
+            <p>Email: <%= user.email %></p>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <p>No users found.</p>
+      <% } %>
+    </section>
+  </main>
+</body>
+</html>
